@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .main {
+            width: 300px;
+            display: flex;
+            margin: 40px auto;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input {
+            padding: 0.4rem;
+            width: 100%;
+            outline: none;
+        }
+    </style>
+    <title>Login Form</title>
+</head>
+
+<body>
+    <div class="main">
+        <h2>Login Form</h2>
+        <form>
+            <input type="text" id="username" name="username" placeholder="Enter your name">
+            <br><br>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required><br><br>
+
+            <button type="button" id="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Firebase Configuration and Firestore Integration -->
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDG_N5IiyCCzDLngK4lWlYNZziZgxEUlO4",
+            authDomain: "try-push-data.firebaseapp.com",
+            projectId: "try-push-data",
+            storageBucket: "try-push-data.appspot.com",
+            messagingSenderId: "664810271003",
+            appId: "1:664810271003:web:a7d37d388992e7cf6fa3be"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('submit').addEventListener('click', async function (event) {
+            event.preventDefault(); // Prevent form submission
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Specify the document ID as the username
+                await setDoc(doc(db, 'my_users', username), {
+                    name: username,
+                    password: password
+                });
+                alert("Successfully pushed data to your database!");
+            } catch (error) {
+                alert("Something went wrong: " + error.message);
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
